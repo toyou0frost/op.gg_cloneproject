@@ -4,6 +4,7 @@ import styled from "styled-components";
 import classnames from "classnames";
 import Champion from "../components/Champion"
 import ChampionModel from "../models/ChampionModel";
+import { useState } from "react";
 
 const ChampionListPageWrapper = styled.div`
     display: flex;
@@ -59,6 +60,7 @@ const ChampionTrendWrapper = styled.div`
 
 // List of champion page
 
+
 interface ChampionListProps{
 
 }
@@ -67,6 +69,7 @@ interface ChampionListState{
     allChampions: ChampionModel[];
     champions: ChampionModel[];
     type:string;
+    input:string;
 }
 
 export default class ChampionsList extends React.Component<ChampionListProps, ChampionListState> {
@@ -78,6 +81,7 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
             allChampions: [],
             champions: [],
             type: "ALL",
+            input: "",
         }
     }
 
@@ -85,6 +89,13 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
         this.setState({
             type,
             champions: this.filterChampions(type),
+        });
+    }
+
+    onChangeInput = (input:string) => {
+        this.setState({
+            input,
+            champions: this.changeChampion(input),
         });
     }
 
@@ -105,7 +116,17 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
         });
     }
     
+    changeChampion = (value: string) => {
+        if(value != ""){
+            return this.state.allChampions.filter(c => c.name!!.includes(value));
+        }
+        else{
+            return this.state.allChampions;
+        }
+    }
+
     filterChampions = (type: string) => {
+        console.log(type+"type");
         switch (type){
             case "TOP":
                 return this.state.allChampions.filter(c => c.position!!.indexOf("탑") > -1);
@@ -135,7 +156,7 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
                             <div className={classnames("item", {select: this.state.type === "ADC"})} onClick={this.onChangeType("ADC")}>바텀</div>
                             <div className={classnames("item", {select: this.state.type === "SUP"})} onClick={this.onChangeType("SUP")}>서포터</div>
                         </div>
-                        <input type="text" placeholder="챔피언 검색 (가렌, ㄱㄹ, ...)"/>
+                        <input type="text" placeholder="챔피언 검색 (가렌, ㄱㄹ, ...)"  onChange={e => this.onChangeInput(e.target.value)}/>
                     </div>
                     <div className="list">
                         {
