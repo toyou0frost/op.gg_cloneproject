@@ -4,7 +4,11 @@ import styled from "styled-components";
 import classnames from "classnames";
 import Champion from "../components/Champion"
 import ChampionModel from "../models/ChampionModel";
-import { useState } from "react";
+import ChampionIcon from "../assets/icon-champion-p.png";
+import ChampionTrenditem from "../components/ChampionTrenditem";
+import ChampionTrendHeader from "../components/ChampionTrendHeader"
+import ChampionTrendToolbar from "../components/ChampionTrendToolbar"
+
 
 const ChampionListPageWrapper = styled.div`
     display: flex;
@@ -49,13 +53,72 @@ const ChampionsWrapper = styled.div`
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        padding: 0 40px;
+        padding: 0 20px;
     }
 `
 
 const ChampionTrendWrapper = styled.div`
     flex: 1;
     background-color: white;
+
+    & > .trend-header{
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        align-items: center;
+        border-bottom: 1px solid #e9eff4;
+
+            & > .trend-item{
+                height: 60px;
+                color: rgba(0, 0,0, .6);
+                cursor: pointer;
+                line-height: 60px;
+                padding: 0 15px;
+                font-size: 14px;
+                position: relative;
+                align-items: center;
+
+                &:first-child{
+                    font-weight: bold;
+                    flex: 3;
+                    text-align: left;
+                    color: black;
+                }
+
+                & > img{
+                    height: 17px;
+                    margin-right: 5px;
+                }
+
+                &:not(:last-child):not(:first-child)::after{
+                    content: "";
+                    width: 1px;
+                    height: 20px;
+                    background-color: #eee;
+                    position: absolute;
+                    right: -4px;
+                    top: 35%;
+                }
+
+                &:last-child{
+                    margin-right: 15px;
+                }
+
+                &.select {
+                        box-shadow: 0px -3px 0px 0px #5383e8 inset;
+                        color: #5383e8;
+                        font-weight: bold;
+                }
+            }
+        
+    }
+
+    & > .trend-list{
+        height: 100vh;
+        background-color: #f7f7f7;
+        padding: 20px;
+    }
+
 `
 
 // List of champion page
@@ -88,7 +151,7 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
     onChangeType = (type: string) => () => {
         this.setState({
             type,
-            champions: this.filterChampions(type),
+            champions: this.filterChampions(type).filter(champ => champ.name?.includes(this.state.input)),
         });
     }
 
@@ -117,8 +180,8 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
     }
     
     changeChampion = (value: string) => {
-        if(value != ""){
-            return this.state.allChampions.filter(c => c.name!!.includes(value));
+        if(value !== ""){
+            return this.filterChampions(this.state.type).filter(c => c.name!!.includes(value));
         }
         else{
             return this.state.allChampions;
@@ -173,10 +236,33 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
                     </div>
                 </ChampionsWrapper>
                 <ChampionTrendWrapper>
-                    trends
+                    <div className="trend-header">
+                        <div className="trend-item">챔피언 순위</div>
+                        <div className="trend-item select"><img src={ChampionIcon} alt="champion" /> 티어</div>
+                        <div className="trend-item">승률</div>
+                        <div className="trend-item">픽률</div>
+                        <div className="trend-item">밴률</div>
+                    </div>
+                    <div className="trend-list">
+                        <ChampionTrendToolbar className="list-item">
+                            <div hidden={true}>전체</div>
+                            <div className="select">탑</div>
+                            <div>정글</div>
+                            <div>미드</div>
+                            <div>바텀</div>
+                            <div>서포터</div>
+                        </ChampionTrendToolbar>
+                        <ChampionTrendHeader className="list-item">
+                            <div>#</div>
+                            <div>챔피언</div>
+                            <div>승률</div>
+                            <div>픽률</div>
+                            <div>티어</div>
+                        </ChampionTrendHeader>
+                        <ChampionTrenditem></ChampionTrenditem>
+                    </div>
                 </ChampionTrendWrapper>
             </ChampionListPageWrapper>
         )
     }
 }
-
