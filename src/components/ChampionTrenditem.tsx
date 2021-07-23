@@ -17,6 +17,8 @@ interface ChampionTrendItemProps {
     pick: string;
     tier: string;
     rank: string;
+    trendType: string;
+    banRate: string;
 }
 
 
@@ -96,11 +98,15 @@ const ChampionTrendItem: React.FC<ChampionTrendItemProps> = (props) => {
                     <div>{props.position}</div>
                 </div>
             </div>
-            <div className="win">{props.win}</div>
-            <div className="pick">{props.pick}</div>
+            <div className="win" hidden={props.trendType === "banratio" || props.trendType === "pickratio"} style={{color:"#4a90e2"}}>{props.win}</div>
+            <div className="pick" hidden={props.trendType === "banratio" || props.trendType === "pickratio"}>{props.pick}</div>
+
+            <div className="pick" hidden={props.trendType === "banratio" || props.trendType !== "pickratio"}>{props.pick}</div>
+            <div className="win" hidden={props.trendType === "banratio" || props.trendType !== "pickratio"} style={{color:"#4a90e2"}}>{props.win}</div>
             <div className="tier">
                 <img src={props.tier} alt="" />
             </div>
+            <div hidden={props.trendType !=="banratio"}style={{color:"#4a90e2"}}>{props.banRate}</div>
         </ChampionTrendItermWrapper>
     )
 }

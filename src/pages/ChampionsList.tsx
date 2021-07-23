@@ -210,9 +210,11 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
                         <ChampionTrendHeader>
                             <div>#</div>
                             <div>챔피언</div>
-                            <div>승률</div>
-                            <div>픽률</div>
-                            <div>티어</div>
+                            <div hidden={this.state.trendType === "banratio" || this.state.trendType === "pickratio"}>승률</div>
+                            <div hidden={this.state.trendType === "banratio"}>픽률</div>
+                            <div hidden={this.state.trendType === "banratio" || this.state.trendType !== "pickratio"}>승률</div>
+                            <div hidden={this.state.trendType !== "tier"}>티어</div>
+                            <div hidden={this.state.trendType !== "banratio"}>밴률</div>
                         </ChampionTrendHeader>
                         
                         {
@@ -226,6 +228,8 @@ export default class ChampionsList extends React.Component<ChampionListProps, Ch
                                     pick={c.pickRate}
                                     tier={c.tierIcon}
                                     rank={c.rank}
+                                    trendType={this.state.trendType}
+                                    banRate={c.banRate}
                                 />
                             )
                         }
