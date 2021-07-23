@@ -1,27 +1,25 @@
-import styled, { css }  from "styled-components";
+import styled, {css} from "styled-components";
 
 export const ChampionTrendItemCss = css`
     display: flex;
     align-items: center;
-
-    & > div{
+    & > div {
         text-align: center;
-        color: rgba(0, 0,0, .6);
+        color: rgba(0,0,0,.6);
     }
 `
 
 const ChampionTrendHeader = styled.div`
-    ${ChampionTrendItemCss}
-
+    ${ChampionTrendItemCss};
     padding: 15px;
-        & > div{
+    & > div {
         flex: 1;
         font-size: 12px;
-        &:nth-child(1){
-            flex: 0.1;
+        &:nth-child(1) {
+            flex: 0.5;
+            text-align: center;
         }
-
-        &:nth-child(2){
+        &:nth-child(2) {
             flex: 3;
         }
     }
